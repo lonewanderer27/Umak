@@ -1,0 +1,37 @@
+package com.bryle_sanico.umak.ui.adruino;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.bryle_sanico.umak.databinding.FragmentAdruinoBinding;
+
+public class AdruinoFragment extends Fragment {
+
+    private FragmentAdruinoBinding binding;
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        AdruinoViewModel galleryViewModel =
+                new ViewModelProvider(this).get(AdruinoViewModel.class);
+
+        binding = FragmentAdruinoBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        final TextView textView = binding.textGallery;
+        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        return root;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+}

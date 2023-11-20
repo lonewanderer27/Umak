@@ -1,0 +1,15 @@
+<!-- navigation_item_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#888888" /> <!-- Set the desired gray color here -->
+        </shape>
+    </item>
+    <!-- Default state -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" /> <!-- Set default color here if needed -->
+        </shape>
+    </item>
+</selector>

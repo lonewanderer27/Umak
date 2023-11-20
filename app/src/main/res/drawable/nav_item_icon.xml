@@ -1,0 +1,7 @@
+<!-- navigation_item_icon_color.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state -->
+    <item android:state_checked="true" android:color="#FFFFFF" /> <!-- Set the desired white color here -->
+    <!-- Default state -->
+    <item android:color="@color/primary_text" /> <!-- Set default icon color here -->
+</selector>
