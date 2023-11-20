@@ -3,5 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="components_background">#FFFFFFFF</color>
+    <color name="activity_bg">#D9C179</color>
     <color name="primary_text">#746F6F</color>
+    <color name="appbar_bg">#398B5D</color>
 </resources>

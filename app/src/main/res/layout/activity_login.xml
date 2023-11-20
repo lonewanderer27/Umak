@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D9C179"
-    android:gravity="center">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/activity_bg">
 
     <!-- Header -->
     <View
         android:id="@+id/imgParticle"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:background="@drawable/particle"
         android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Main content -->
 
+    <!-- Main content -->
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/loginform_Layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgParticle">
+        android:layout_marginTop="-120dp"
+        app:layout_constraintEnd_toEndOf="@+id/imgParticle"
+        app:layout_constraintStart_toStartOf="@+id/imgParticle"
+        app:layout_constraintTop_toBottomOf="@+id/imgParticle">
 
         <View
             android:id="@+id/appLogo"
@@ -45,19 +42,15 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/loginform_Layout"
-        android:layout_width="match_parent"
+        android:id="@+id/loginForm_Layout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="25dp"
-        android:layout_weight="1"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/imgFooter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgParticle">
+        app:layout_constraintEnd_toEndOf="@+id/imgParticle"
+        app:layout_constraintStart_toStartOf="@+id/imgParticle"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView"
@@ -74,7 +67,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="38dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/baseline_person_24" />
 
@@ -115,7 +108,7 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="38dp"
                 android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/baseline_lock_24" />
 
@@ -124,7 +117,7 @@
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:hint="@string/txt_passwrod"
+                android:hint="@string/txt_password"
                 android:importantForAutofill="no"
                 android:inputType="textPassword"
                 android:textAlignment="center"
@@ -142,10 +135,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="42dp"
-            android:text="Forgot Password"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="89dp"
+            android:text="@string/forgot_password"
             android:textColor="#0047ab"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnGoogle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
@@ -163,12 +158,12 @@
             app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textOR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
-            android:text="-- OR --"
-            android:textColor="@color/primary_text"
+            android:text="@string/or"
+            android:textColor="#616161"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -191,7 +186,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.492"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textOR"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
@@ -208,30 +203,30 @@
             app:layout_constraintTop_toBottomOf="@+id/btnGoogle"
             app:layout_constraintVertical_bias="1.0" />
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Footer -->
     <View
         android:id="@+id/imgFooter"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/footer"
-        android:contentDescription="@string/cd_footer"
-        android:orientation="horizontal"
+        app:layout_constraintDimensionRatio="16:4"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/imgParticle"
+        app:layout_constraintStart_toStartOf="@+id/imgParticle" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="©Adamson Team"
-        android:textSize="18sp"
+        android:text="@string/adamson_team"
+        android:textColor="#F1F8E9"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginform_Layout"
-        app:layout_constraintVertical_bias="0.849" />
-
+        app:layout_constraintEnd_toEndOf="@+id/imgParticle"
+        app:layout_constraintStart_toStartOf="@+id/imgParticle"
+        app:layout_constraintTop_toBottomOf="@+id/loginForm_Layout"
+        app:layout_constraintVertical_bias="0.894" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
