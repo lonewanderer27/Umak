@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Umak</string>
+    <string name="txt_login">LOGIN</string>
+    <string name="cd_footer">Footer</string>
+    <string name="txt_passwrod">Password</string>
+    <string name="txt_username">Username</string>
+    <string name="create_an_account">CREATE AN ACCOUNT</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+</resources>
