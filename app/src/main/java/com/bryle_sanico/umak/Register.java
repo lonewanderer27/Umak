@@ -89,7 +89,7 @@ public class Register extends AppCompatActivity {
                 }
 
                 // SUPPLY THE USERNAME AND PASSWORD DATA FROM THE TEXT FIELD
-                if(!CreateAccount("create.php",str_fname, str_mname, str_lname, str_email, str_contact, str_age, str_cpassword)){
+                if(!CreateAccount("create.php",str_fname, str_mname, str_lname, str_email, str_contact, str_address,str_age, str_cpassword)){
                     Toast.makeText(Register.this,"Register Failed! Please try again",Toast.LENGTH_LONG).show();
                 }
             }
@@ -171,7 +171,7 @@ public class Register extends AppCompatActivity {
 
 
 
-    public boolean CreateAccount(String PHPFile, String Fname, String Mname,String Lname, String Email, String Contact, String Age,String Password){
+    public boolean CreateAccount(String PHPFile, String Fname, String Mname,String Lname, String Email, String Contact, String Address, String Age,String Password){
         stringRequest=new StringRequest(Request.Method.POST, (URL+PHPFile), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -198,6 +198,7 @@ public class Register extends AppCompatActivity {
                 params.put("Lname", Lname);
                 params.put("Email", Email);
                 params.put("Contact", Contact);
+                params.put("Address", Address);
                 params.put("Age", Age);
                 params.put("password", Password);
 
