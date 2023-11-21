@@ -31,7 +31,7 @@ public class Register extends AppCompatActivity {
     public static ProgressDialog progressdialog;
     private StringRequest stringRequest;
     private RequestQueue requestQueue;
-    private Intent directMain;
+    private Intent directLogin;
     private String URL="http://192.168.0.32/umak/", PHPFile="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         progressdialog = new ProgressDialog(Register.this);
         requestQueue = Volley.newRequestQueue(this);
-
+        directLogin = new Intent(Register.this, Login.class);
         MaterialCardView cpasswordCardView = findViewById(R.id.cpasswordEditText);
         MaterialCardView passwordCardView = findViewById(R.id.passwordEditText);
         MaterialCardView fnameCardView = findViewById(R.id.fNameEditText);
@@ -81,6 +81,12 @@ public class Register extends AppCompatActivity {
                 String str_contact = inputContact.getText().toString();
                 String str_address = inputAddress.getText().toString();
                 String str_cpassword = inputCPassword.getText().toString();
+                // Check if passwords match
+                if (!str_password.equals(str_cpassword)) {
+                    progressdialog.dismiss();
+                    Toast.makeText(Register.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    return; // Stop further execution
+                }
 
                 // SUPPLY THE USERNAME AND PASSWORD DATA FROM THE TEXT FIELD
                 if(!CreateAccount("create.php",str_fname, str_mname, str_lname, str_email, str_contact, str_age, str_cpassword)){
@@ -170,6 +176,8 @@ public class Register extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 if(response.equals("Success!")){  // user is logged in
+                    startActivity(directLogin);
+                    finish();
                 } else {
                     Toast.makeText(Register.this,response, Toast.LENGTH_LONG).show();
                 }
