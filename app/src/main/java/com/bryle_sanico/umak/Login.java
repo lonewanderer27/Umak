@@ -36,15 +36,11 @@ public class Login extends AppCompatActivity {
 
         inputUsername.setOnFocusChangeListener((view, hasFocus) -> {
             if (hasFocus) {
-//                // Apply the custom background drawable without underline
-//                inputUsername.setBackgroundResource(R.drawable.edittext_remove_underline);
                 // Apply drop shadow to username card view
                 applyDropShadow(usernameCardView);
                 // Remove drop shadow from password card view if it was applied earlier
                 removeDropShadow(passwordCardView);
             } else {
-                // Reapply default background or any other background when focus is lost
-                // inputUsername.setBackgroundResource(R.drawable.default_edittext_bg);
                 // Remove drop shadow from username card view if the focus is lost
                 removeDropShadow(usernameCardView);
             }
@@ -52,15 +48,11 @@ public class Login extends AppCompatActivity {
 
         inputPassword.setOnFocusChangeListener((view, hasFocus) -> {
             if (hasFocus) {
-//                // Apply the custom background drawable without underline
-//                inputPassword.setBackgroundResource(R.drawable.edittext_remove_underline);
                 // Apply drop shadow to password card view
                 applyDropShadow(passwordCardView);
                 // Remove drop shadow from username card view if it was applied earlier
                 removeDropShadow(usernameCardView);
             } else {
-                // Reapply default background or any other background when focus is lost
-                // inputPassword.setBackgroundResource(R.drawable.default_edittext_bg);
                 // Remove drop shadow from password card view if the focus is lost
                 removeDropShadow(passwordCardView);
             }
