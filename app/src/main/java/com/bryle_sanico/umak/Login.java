@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.app.ProgressDialog;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -27,7 +28,7 @@ public class Login extends AppCompatActivity {
     public static ProgressDialog progressdialog;
     private StringRequest stringRequest;
     private RequestQueue requestQueue;
-    private Intent directMain;
+    private Intent directMain, directRetrieveAccount;
 
     private EditText inputUsername, inputPassword;
     private String URL="http://192.168.0.32/umak/", PHPFile="";
@@ -43,6 +44,14 @@ public class Login extends AppCompatActivity {
         inputUsername = findViewById(R.id.inputEmail);
         inputPassword = findViewById(R.id.inputPassword);
 
+        TextView myTextView = findViewById(R.id.forgotPassword);
+        myTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                directRetrieveAccount = new Intent(Login.this, RetrieveAccount.class);
+                startActivity(directRetrieveAccount);
+            }
+        });
         directMain = new Intent(Login.this, HomeActivity.class);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +152,6 @@ public class Login extends AppCompatActivity {
         }; timer.start();
         return true;
     }
-
     private void applyDropShadow(MaterialCardView cardView) {
         if (cardView != null) {
             cardView.setCardElevation(18);
