@@ -132,6 +132,7 @@ public class Login extends AppCompatActivity {
                     // create user object
                     user = new User(
                             userObj.getInt("id"),
+                            userObj.getInt("age"),
                             userObj.getString("first_name"),
                             userObj.getString("middle_name"),
                             userObj.getString("last_name"),
