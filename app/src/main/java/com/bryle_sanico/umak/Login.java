@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.card.MaterialCardView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
+import com.bryle_sanico.umak.User;
 import java.util.Map;
 
 public class Login extends AppCompatActivity {
@@ -29,9 +34,9 @@ public class Login extends AppCompatActivity {
     private StringRequest stringRequest;
     private RequestQueue requestQueue;
     private Intent directMain, directRetrieveAccount;
-
+    User user;
     private EditText inputUsername, inputPassword;
-    private String URL="http://192.168.0.32/umak/", PHPFile="";
+    private String URL="https://plant-iot.vercel.app/_api/", PHPFile="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +65,12 @@ public class Login extends AppCompatActivity {
                 progressdialog.show();
                 String str_username = inputUsername.getText().toString();
                 String str_password = inputPassword.getText().toString();
+
+                Log.i("email", str_username);
+                Log.i("pass", str_password);
+
                 // SUPPLY THE USERNAME AND PASSWORD DATA FROM THE TEXT FIELD
-                if(!LoginAccount("login.php",str_username,str_password)){
+                if(!LoginAccount("login",str_username,str_password)){
                     Toast.makeText(Login.this,"Login Failed! Please try again",Toast.LENGTH_LONG).show();
                 }
             }
@@ -101,37 +110,68 @@ public class Login extends AppCompatActivity {
                 removeDropShadow(passwordCardView);
             }
         });
-
     }
 
 
     public boolean LoginAccount(String PHPFile, String UserName, String PassWord){
-        stringRequest=new StringRequest(Request.Method.POST, (URL+PHPFile), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if(response.equals("Success!")){  // user is logged in
+        stringRequest=new StringRequest(Request.Method.POST, (URL+PHPFile), response -> {
+
+            JSONObject jsonObject;
+
+            try {
+                jsonObject = new JSONObject(response.toString());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+            Log.i("response", jsonObject.toString());
+            try {
+                if (jsonObject.getBoolean("success")) {  // user is logged in
+                    JSONObject userObj = jsonObject.getJSONObject("user");
+
+                    // create user object
+                    user = new User(
+                            userObj.getInt("id"),
+                            userObj.getString("first_name"),
+                            userObj.getString("middle_name"),
+                            userObj.getString("last_name"),
+                            userObj.getString("address"),
+                            userObj.getString("contact_no"),
+                            userObj.getString("email")
+                    );
+
+                    directMain.putExtra("user", user);
+
                     startActivity(directMain);
                     finish();
                 } else {
-                    Toast.makeText(Login.this,response, Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, response, Toast.LENGTH_LONG).show();
                 }
-                progressdialog.hide();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Login.this,error.getMessage(),Toast.LENGTH_LONG).show();
-                progressdialog.hide();
-            }
+            progressdialog.hide();
+
+        }, error -> {
+            Toast.makeText(Login.this,error.getMessage(),Toast.LENGTH_LONG).show();
+            progressdialog.hide();
         }){
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_name", UserName);
-                params.put("user_password", PassWord);
+                params.put("email", UserName);
+                params.put("password", PassWord);
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("X-API-KEY", "base64:0ixCx28dCv5xpHbovzpCV5KEq/1rKfC8U4Ac40NYztI=");
                 return params;
             }
         };
+
         Thread timer = new Thread(){
             @Override
             public void run() {
@@ -143,6 +183,7 @@ public class Login extends AppCompatActivity {
                 finally {
                     try {
                         requestQueue.add(stringRequest);
+                        Log.i("string req: ", stringRequest.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -152,6 +193,7 @@ public class Login extends AppCompatActivity {
         }; timer.start();
         return true;
     }
+
     private void applyDropShadow(MaterialCardView cardView) {
         if (cardView != null) {
             cardView.setCardElevation(18);

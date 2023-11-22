@@ -10,6 +10,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.card.MaterialCardView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +36,8 @@ public class Register extends AppCompatActivity {
     private StringRequest stringRequest;
     private RequestQueue requestQueue;
     private Intent directLogin;
-    private String URL="http://192.168.0.32/umak/", PHPFile="";
+    User user;
+    private String URL="https://plant-iot.vercel.app/_api/", PHPFile="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +94,7 @@ public class Register extends AppCompatActivity {
                 }
 
                 // SUPPLY THE USERNAME AND PASSWORD DATA FROM THE TEXT FIELD
-                if(!CreateAccount("create.php",str_fname, str_mname, str_lname, str_email, str_contact, str_address,str_age, str_cpassword)){
+                if(!CreateAccount("users",str_fname, str_mname, str_lname, str_email, str_contact, str_address,str_age, str_cpassword)){
                     Toast.makeText(Register.this,"Register Failed! Please try again",Toast.LENGTH_LONG).show();
                 }
             }
@@ -172,36 +177,66 @@ public class Register extends AppCompatActivity {
 
 
     public boolean CreateAccount(String PHPFile, String Fname, String Mname,String Lname, String Email, String Contact, String Address, String Age,String Password){
-        stringRequest=new StringRequest(Request.Method.POST, (URL+PHPFile), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if(response.equals("Success!")){  // user is logged in
+        stringRequest=new StringRequest(Request.Method.POST, (URL+PHPFile), response -> {
+
+            JSONObject jsonObject;
+
+            try {
+                jsonObject = new JSONObject(response.toString());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+            Log.i("response", jsonObject.toString());
+
+            try {
+                if (jsonObject.getBoolean("success")) {  // user is logged in
+                    JSONObject userObj = jsonObject.getJSONObject("user");
+
+                    // create user object
+//                    user = new User(
+//                            userObj.getInt("id"),
+//                            userObj.getString("first_name"),
+//                            userObj.getString("middle_name"),
+//                            userObj.getString("last_name"),
+//                            userObj.getString("address"),
+//                            userObj.getString("contact_no"),
+//                            userObj.getString("email")
+//                    );
+//
+//                    directLogin.putExtra("user", user);
                     startActivity(directLogin);
                     finish();
                 } else {
-                    Toast.makeText(Register.this,response, Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this, response, Toast.LENGTH_LONG).show();
                 }
-                progressdialog.hide();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Register.this,error.getMessage(),Toast.LENGTH_LONG).show();
-                progressdialog.hide();
-            }
+            progressdialog.hide();
+        }, error -> {
+            Toast.makeText(Register.this,error.getMessage(),Toast.LENGTH_LONG).show();
+            progressdialog.hide();
         }){
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Fname", Fname);
-                params.put("Mname", Mname);
-                params.put("Lname", Lname);
-                params.put("Email", Email);
-                params.put("Contact", Contact);
-                params.put("Address", Address);
-                params.put("Age", Age);
+                params.put("first_name", Fname);
+                params.put("middle_name", Mname);
+                params.put("last_name", Lname);
+                params.put("email", Email);
+                params.put("contact_no", Contact);
+                params.put("address", Address);
+                params.put("age", Age);
                 params.put("password", Password);
 
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("X-API-KEY", "base64:0ixCx28dCv5xpHbovzpCV5KEq/1rKfC8U4Ac40NYztI=");
                 return params;
             }
         };

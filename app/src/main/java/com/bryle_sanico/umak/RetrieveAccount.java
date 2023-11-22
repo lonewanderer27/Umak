@@ -25,7 +25,7 @@ public class RetrieveAccount extends AppCompatActivity {
     public static ProgressDialog progressdialog;
     private StringRequest stringRequest;
     private RequestQueue requestQueue;
-    private Intent directMain;
+    private Intent directLogin;
 
     private EditText inputEmail;
     private String URL="http://192.168.0.32/umak/", PHPFile="";
@@ -59,7 +59,7 @@ public class RetrieveAccount extends AppCompatActivity {
                 if (response.equals("Password sent, Check your Email!!")) {  // Email Sent
                     Toast.makeText(RetrieveAccount.this, response, Toast.LENGTH_LONG).show();
                     // Start your intended activity
-                    startActivity(directMain); // Replace directMain with your Intent
+                    startActivity(directLogin); // Replace directMain with your Intent
                     finish();
                 } else {
                     Toast.makeText(RetrieveAccount.this, response, Toast.LENGTH_LONG).show();
@@ -84,7 +84,7 @@ public class RetrieveAccount extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    sleep(500);
+                    sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

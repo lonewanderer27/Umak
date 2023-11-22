@@ -1,6 +1,8 @@
 package com.bryle_sanico.umak;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
@@ -18,6 +20,7 @@ import com.bryle_sanico.umak.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
 
+    User user;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityHomeBinding binding;
 
@@ -40,14 +43,19 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_home);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        Intent intent = getIntent();
+        user = (User) intent.getSerializableExtra("user");
+
+        Log.i("user", user.toString());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.home, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.home, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {
