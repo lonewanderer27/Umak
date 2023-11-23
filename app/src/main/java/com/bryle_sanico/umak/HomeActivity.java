@@ -86,6 +86,7 @@ public class HomeActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
+                editor.apply();
 
                 finish();
                 return true;
