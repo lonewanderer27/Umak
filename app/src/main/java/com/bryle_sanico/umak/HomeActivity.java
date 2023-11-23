@@ -85,18 +85,18 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(HomeActivity.this, Login.class);
                 startActivity(intent2);
                 finish();
-                return true;
             } else if (id == R.id.nav_home) {
                 // Navigate to Home
                 navController.navigate(R.id.nav_home);
-                return true;
             } else if (id == R.id.nav_account) {
                 // Navigate to Account
                 navController.navigate(R.id.nav_account);
-                return true;
             }
 
-            return false;
+            // Close the navigation drawer
+            drawer.closeDrawers();
+
+            return true;
         });
 
         if (GetPairing("pairings", 3, 1)) {
