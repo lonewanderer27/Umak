@@ -79,15 +79,11 @@ public class HomeActivity extends AppCompatActivity {
             int id = menuItem.getItemId();
 
             if (id == R.id.nav_logout) { // replace 'nav_logout' with the actual id of your logout menu item
-                Intent intent2 = new Intent(HomeActivity.this, Login.class); // replace 'LoginActivity' with the actual name of your login activity
+                // Clear user data
+                clearUserData();
+
+                Intent intent2 = new Intent(HomeActivity.this, Login.class);
                 startActivity(intent2);
-
-                // clear shared preferences
-                SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
-
                 finish();
                 return true;
             } else if (id == R.id.nav_home) {
@@ -110,6 +106,13 @@ public class HomeActivity extends AppCompatActivity {
                 homeViewModel.setReading(reading);
             }
         }
+    }
+
+    public void clearUserData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
     @Override
