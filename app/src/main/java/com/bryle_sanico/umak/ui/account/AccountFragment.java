@@ -1,21 +1,28 @@
 package com.bryle_sanico.umak.ui.account;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import android.content.SharedPreferences;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
+import com.bryle_sanico.umak.Login;
 import com.bryle_sanico.umak.R;
 import com.bryle_sanico.umak.User;
 import com.google.android.material.card.MaterialCardView;
@@ -52,6 +59,8 @@ public class AccountFragment extends Fragment {
         EditText contactEditText = rootView.findViewById(R.id.inputContact);
         EditText addressEditText = rootView.findViewById(R.id.inputAddress);
         EditText emailEditText = rootView.findViewById(R.id.inputEmail);
+        Button updateButton = rootView.findViewById(R.id.btnSubmit);
+
 
         // Update the text fields with the user data
         firstNameEditText.setText(user.first_name);
@@ -62,10 +71,39 @@ public class AccountFragment extends Fragment {
         addressEditText.setText(user.address);
         emailEditText.setText(user.email);
 
+        updateButton.setOnClickListener(view -> {
+            try {
+                if (updateInfo()) {
+                    // Update the user in accountviewmodel
+                    accountViewModel.setUser(user);
+
+                    // update user preferences
+                    saveUserData(user);
+                }
+            } catch (AuthFailureError e) {
+//                throw new RuntimeException(e);
+                Log.e("AuthFailureError", e.getMessage());
+            }
+        });
+
         return rootView;
     }
 
-    public boolean updateInfo() {
+    public void saveUserData(User user) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("id", user.id);
+        editor.putString("first_name", user.first_name);
+        editor.putString("middle_name", user.middle_name);
+        editor.putString("last_name", user.last_name);
+        editor.putString("address", user.address);
+        editor.putString("contact_no", user.contact_no);
+        editor.putString("email", user.email);
+        editor.putInt("age", user.age);
+        editor.apply();
+    }
+
+    public boolean updateInfo() throws AuthFailureError {
         // Get references to the text fields
         EditText firstNameEditText = requireView().findViewById(R.id.inputFname);
         EditText middleNameEditText = requireView().findViewById(R.id.inputMname);
@@ -159,8 +197,8 @@ public class AccountFragment extends Fragment {
         }
     }
 
-    public boolean updateOnDb(String PHPFile, Integer user_id, String FirstName, String MiddleName, String LastName, String Age, String Contact, String Address, String Email, String Password) {
-        String route = "/update/id" + user_id;
+    public boolean updateOnDb(String PHPFile, Integer user_id, String FirstName, String MiddleName, String LastName, String Age, String Contact, String Address, String Email, String Password) throws AuthFailureError {
+        String route = "/update/id/" + user_id;
         final boolean[] success = {false};
 
         StringRequest srs = new StringRequest(Request.Method.POST, (URL + PHPFile + route), new Response.Listener<String>() {
@@ -170,7 +208,9 @@ public class AccountFragment extends Fragment {
 
                 try {
                     jsonObject = new JSONObject(response);
+                    Log.i("response", jsonObject.toString());
                 } catch (JSONException e) {
+                    Log.e("JSON Exception", e.getMessage());
                     throw new RuntimeException(e);
                 }
 
@@ -190,10 +230,12 @@ public class AccountFragment extends Fragment {
                         success[0] = true;
                     }
                 } catch (JSONException e) {
+                    Log.e("JSON Exception", e.getMessage());
                     Toast.makeText(AccountFragment.this.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         }, error -> {
+            Log.e("Volley Error", error.getMessage());
             Toast.makeText(AccountFragment.this.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
         }) {
             @Override
@@ -218,6 +260,8 @@ public class AccountFragment extends Fragment {
                 return params;
             }
         };
+
+        Log.i("request", srs.getBody().toString());
 
         return success[0];
 }
