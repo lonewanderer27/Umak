@@ -3,6 +3,8 @@ package com.bryle_sanico.umak;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.bryle_sanico.umak.databinding.ActivityHomeBinding;
+import com.bryle_sanico.umak.ui.account.AccountViewModel;
 import com.bryle_sanico.umak.ui.home.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 
@@ -60,6 +63,37 @@ public class HomeActivity extends AppCompatActivity {
 
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.setUser(user);
+
+        AccountViewModel accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        accountViewModel.setUser(user);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView navHeaderTitle = headerView.findViewById(R.id.textView2);
+        TextView navHeaderSubtitle = headerView.findViewById(R.id.textView);
+
+        navHeaderTitle.setText(user.first_name);
+        navHeaderSubtitle.setText(user.email);
+
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            int id = menuItem.getItemId();
+
+            if (id == R.id.nav_logout) { // replace 'nav_logout' with the actual id of your logout menu item
+                Intent intent2 = new Intent(HomeActivity.this, Login.class); // replace 'LoginActivity' with the actual name of your login activity
+                startActivity(intent2);
+                finish();
+                return true;
+            } else if (id == R.id.nav_home) {
+                // Navigate to Home
+                navController.navigate(R.id.nav_home);
+                return true;
+            } else if (id == R.id.nav_account) {
+                // Navigate to Account
+                navController.navigate(R.id.nav_account);
+                return true;
+            }
+
+            return false;
+        });
 
         if (GetPairing("pairings", 3, 1)) {
             // fetch the latest reading
@@ -109,7 +143,7 @@ public class HomeActivity extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("X-API-KEY", "base64:0ixCx28dCv5xpHbovzpCV5KEq/1rKfC8U4Ac40NYztI=");
                 return params;
             }
@@ -151,7 +185,7 @@ public class HomeActivity extends AppCompatActivity {
         }) {
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("X-API-KEY", "base64:0ixCx28dCv5xpHbovzpCV5KEq/1rKfC8U4Ac40NYztI=");
                 return params;
             }
