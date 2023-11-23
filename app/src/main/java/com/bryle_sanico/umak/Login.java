@@ -3,6 +3,7 @@ package com.bryle_sanico.umak;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -110,6 +111,42 @@ public class Login extends AppCompatActivity {
                 removeDropShadow(passwordCardView);
             }
         });
+
+        // Check if the user is already logged in
+        if (getUserData().id != 0) {
+            user = getUserData();
+            directMain.putExtra("user", user);
+            startActivity(directMain);
+            finish();
+        }
+    }
+
+    public User getUserData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        int id = sharedPreferences.getInt("id", 0);
+        int age = sharedPreferences.getInt("age", 0);
+        String firstName = sharedPreferences.getString("first_name", "");
+        String middleName = sharedPreferences.getString("middle_name", "");
+        String lastName = sharedPreferences.getString("last_name", "");
+        String address = sharedPreferences.getString("address", "");
+        String contactNo = sharedPreferences.getString("contact_no", "");
+        String email = sharedPreferences.getString("email", "");
+
+        return new User(id, age, firstName, middleName, lastName, address, contactNo, email);
+    }
+
+    public void saveUserData(User user) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("id", user.id);
+        editor.putString("first_name", user.first_name);
+        editor.putString("middle_name", user.middle_name);
+        editor.putString("last_name", user.last_name);
+        editor.putString("address", user.address);
+        editor.putString("contact_no", user.contact_no);
+        editor.putString("email", user.email);
+        editor.putInt("age", user.age);
+        editor.apply();
     }
 
 
@@ -142,6 +179,7 @@ public class Login extends AppCompatActivity {
                     );
 
                     directMain.putExtra("user", user);
+                    saveUserData(user);
 
                     startActivity(directMain);
                     finish();
